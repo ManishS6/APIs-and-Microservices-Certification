@@ -24,10 +24,6 @@ const createAndSavePerson = (done) => {
     done(null , data);
     });
 };
-<<<<<<< HEAD
-=======
-// testing
->>>>>>> 07c8ea41e60b6a5ffb6842feaf88aa4f01990014
 
 const createManyPeople = (arrayOfPeople, done) => {
     Person.create(arrayOfPeople,(err,data)=>{
@@ -94,7 +90,10 @@ const removeById = (personId, done) => {
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-  done(null /*, data*/);
+    Person.remove({name:nameToRemove},(err,data)=>{
+        if (err) return console.error(err);
+    done(null,data);
+    });
 };
 
 const queryChain = (done) => {
