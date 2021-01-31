@@ -24,6 +24,10 @@ const createAndSavePerson = (done) => {
     done(null , data);
     });
 };
+<<<<<<< HEAD
+=======
+// testing
+>>>>>>> 07c8ea41e60b6a5ffb6842feaf88aa4f01990014
 
 const createManyPeople = (arrayOfPeople, done) => {
     Person.create(arrayOfPeople,(err,data)=>{
