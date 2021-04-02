@@ -112,36 +112,45 @@ app.post("/api/exercise/add",async (req,res)=>{
 
 app.get("/api/exercise/log",async (req,res)=>{
   try{
-    userId = req.query.userId;
-    from = req.query.from;
-    to = req.query.to;
-    limit = req.query.limit;
+    let userId = req.query.userId;
+    let from = req.query.from;
+    let to = req.query.to;
+    let limit = req.query.limit;
     const usernameStatus = await User.findOne({
       _id:userId
     });
     let answer = {
       _id: usernameStatus._id,
       username: usernameStatus.username,
-      count: usernameStatus.count,
+      count: 0,
       log: usernameStatus.log
     };
     if(usernameStatus){
-      // if(from){
-      //   for(d in usernameStatus.log){
-      //     var a = new Date(usernameStatus.log[d].date);
-      //     var filtered = answer.log.filter(function(value, index, arr){ 
-      //       return date > a;
-      //     });
-      //     return res.json(filtered);
-      //   }
-      //   if(to){
-      //     for(d in answer.log){
-      //       if(answer.log.date.getTime() > Date )
-      //     }
-      //   }
-      //   return res.json({answer})
-      // }
-      return res.json({usernameStatus})
+      if(from||to){
+        from = new Date(0);
+        to = new Date();
+        if(req.query.from) {
+          // from = Date(req.query.from);
+          // Ffrom = Date(req.query.from).getTime();
+          from = new Date(req.query.from).getTime();
+        }
+        if(req.query.to) {
+          // to = Date(req.query.to);
+          // Fto = to.getTime();
+          to = new Date(req.query.to).getTime();
+        }
+        answer.log = answer.log.filter(
+          (selected)=>{
+            let selectedDate = new Date(selected.date);
+            return selectedDate>=from && selectedDate<=to
+          }
+        )
+      }
+      if(limit){
+        answer.log = answer.log.slice(0,limit);
+      }
+      answer.count=answer.log.length;
+      return res.json({answer})
     } else {
       return res.status(500).json('userId not found');
     }
